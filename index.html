@@ -370,7 +370,7 @@
     </script>
     <!-- PayPal SDK and subscription button setup. Replace YOUR_CLIENT_ID and YOUR_PLAN_ID
          with actual PayPal client ID and subscription plan ID. -->
-    <script src="https://www.paypal.com/sdk/js?client-id=YOUR_CLIENT_ID&vault=true&intent=subscription"></script>
+    <script src="https://www.paypal.com/sdk/js?client-id=ASbepUWwdqL99e9gkPUY-bf2MY5B_vP7JYlK38XMqtk_kzqjmzMnQM-c3788Q8vUb0QDa1KRjX7Hg_sg&vault=true&intent=subscription"></script>
     <script>
       // Initialize Paypal Buttons for subscription payments. This uses the subscription API with
       // a preconfigured plan ID. When the user approves the subscription, display a thank-you
@@ -378,7 +378,7 @@
       paypal.Buttons({
         createSubscription: function (data, actions) {
           return actions.subscription.create({
-            plan_id: 'YOUR_PLAN_ID'
+            plan_id: 'P-03E39493E3728981FNCDSTHA'
           });
         },
         onApprove: function (data, actions) {
