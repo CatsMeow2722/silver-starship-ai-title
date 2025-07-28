@@ -3,68 +3,205 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AI Image Title Generator</title>
+    <title>FlexLister Lot Picture Formatting Tool</title>
     <style>
+      /*
+        Modern styling for the FlexLister UI.
+        Use a light background with a white card to make the content stand out.
+        Rounded corners and subtle shadows give a more contemporary look.
+      */
       body {
-        font-family: Arial, sans-serif;
-        background-color: #f5f5f5;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: flex-start;
-        padding: 40px 20px;
-        min-height: 100vh;
-      }
-      h1 {
-        color: #333;
-        margin-bottom: 20px;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f5f7fa;
+        margin: 0;
+        padding: 40px;
       }
       .container {
-        background: #fff;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        max-width: 500px;
+        background: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        padding: 2rem;
+        max-width: 480px;
         width: 100%;
+        margin: auto;
       }
-      .container label {
+      h2 {
+        text-align: center;
+        color: #2a8f36;
+        margin-top: 0;
+      }
+      /* Subtitle styling below the main heading */
+      .subtitle {
+        text-align: center;
+        color: #6c757d;
+        margin-top: -0.5rem;
+        margin-bottom: 1.5rem;
+        font-size: 0.9rem;
+      }
+      label {
+        font-weight: 600;
         display: block;
-        margin-bottom: 8px;
-        font-weight: bold;
+        margin-top: 1rem;
       }
-      .container input[type="file"] {
-        margin-bottom: 16px;
+      input[type="number"],
+      input[type="file"],
+      input[type="text"],
+      button {
+        width: 100%;
+        padding: 10px;
+        margin-top: 8px;
+        margin-bottom: 15px;
+        font-size: 1rem;
+        border: 1px solid #ced4da;
+        border-radius: 5px;
+        box-sizing: border-box;
       }
-      .container button {
-        background-color: #28a745;
-        color: white;
+      /* Style textareas similarly to inputs */
+      textarea {
+        width: 100%;
+        padding: 10px;
+        margin-top: 8px;
+        margin-bottom: 15px;
+        font-size: 1rem;
+        border: 1px solid #ced4da;
+        border-radius: 5px;
+        box-sizing: border-box;
+        resize: vertical;
+      }
+      button {
+        background-color: #2a8f36;
+        color: #ffffff;
         border: none;
-        padding: 10px 16px;
-        border-radius: 4px;
         cursor: pointer;
-        font-size: 14px;
+        transition: background-color 0.2s ease;
       }
-      .container button:hover {
-        background-color: #218838;
+      button:hover {
+        background-color: #24702e;
       }
-      .result {
-        margin-top: 16px;
-        font-size: 16px;
-        color: #555;
-        min-height: 1.2em;
+      #folderPath {
+        font-size: 0.9em;
+        color: #6c757d;
+        margin-bottom: 1rem;
+      }
+      #status {
+        font-weight: 600;
+        margin-top: 1rem;
+      }
+      /* Disclaimer styling for unsupported platforms */
+      .disclaimer {
+        margin-top: 1rem;
+        padding: 0.75rem 1rem;
+        background-color: #fff3cd;
+        border: 1px solid #ffeeba;
+        border-radius: 6px;
+        color: #856404;
+        font-size: 0.85rem;
+        line-height: 1.4;
+      }
+      /* Call to action box styling */
+      .cta {
+        margin-top: 2rem;
+        padding: 1rem;
+        background-color: #edf7ed; /* light green tint */
+        border: 1px solid #c3e6cb;
+        border-radius: 6px;
+        text-align: center;
+        color: #155724; /* dark green text */
+        font-size: 0.95rem;
+        line-height: 1.5;
+      }
+      .cta strong {
+        display: block;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+      }
+      .cta .cta-button {
+        display: inline-block;
+        margin-top: 0.5rem;
+        background-color: #2a8f36;
+        color: #ffffff;
+        padding: 8px 16px;
+        border-radius: 4px;
+        text-decoration: none;
+        font-weight: 600;
+      }
+      /* Responsive adjustments for smaller screens */
+      @media (max-width: 600px) {
+        body {
+          padding: 20px;
+        }
+        h2 {
+          font-size: 1.5rem;
+        }
+        .subtitle {
+          font-size: 0.95rem;
+        }
+        input[type="number"],
+        input[type="file"],
+        button {
+          font-size: 1rem;
+          padding: 12px;
+        }
       }
     </style>
   </head>
   <body>
-    <h1>AI Image Title Generator</h1>
     <div class="container">
-      <label for="fileInput">Select an image:</label>
-      <input type="file" id="fileInput" accept="image/*" />
-      <button id="generateBtn">Generate Title</button>
-      <div class="result" id="result"></div>
+      <!-- Title and subtitle -->
+      <h2>FlexLister Lot Picture Formatting Tool</h2>
+      <p class="subtitle">
+        Easily format your picture files for importing into AuctionFlex.
+      </p>
+      <!-- Disclaimer about platform support -->
+      <div class="disclaimer">
+        ⚠️ Note: FlexLister’s folder‑saving feature works only on Android phones
+        and desktop Chrome for now. iPhone/iOS browsers don’t yet support the
+        folder picker, but we’re working hard on a version that will.
+      </div>
+      <!-- Form fields -->
+      <label for="lotNumber">Lot #:</label>
+      <input type="number" id="lotNumber" value="1" />
+      <label for="sellerCode">Seller Code:</label>
+      <input type="text" id="sellerCode" />
+      <label for="lotTitle">Lot Title:</label>
+      <input type="text" id="lotTitle" maxlength="50" />
+      <button id="generateTitle" type="button" style="margin-top: 0">
+        Generate Lot Title
+      </button>
+      <label for="description">Description:</label>
+      <textarea id="description" rows="3" placeholder="Enter description"></textarea>
+      <label for="pickFolder">Destination Folder:</label>
+      <button id="pickFolder" type="button">Pick Folder</button>
+      <div id="folderPath"></div>
+      <label for="fileInput">Select Images for Lot:</label>
+      <input type="file" id="fileInput" multiple accept="image/*" />
+      <button id="submit" type="button">Rename &amp; Save</button>
+      <div id="status"></div>
+      <!-- Call to action section for upselling the data entry service -->
+      <div class="cta">
+        <strong
+          >Let us handle your lot titles and data entry for just 5¢ per
+          listing!</strong
+        >
+        <a
+          href="https://tally.so/r/3x5ZDG"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="cta-button"
+          >Get started</a
+        >
+      </div>
     </div>
     <script>
-      // Convert a File object to a Base64 data URL
+      // Keep track of the destination directory handle
+      let destDirHandle = null;
+
+      /**
+       * Convert a File object to a Base64 data URL. This helper allows us to
+       * send image data to the serverless function for AI title generation.
+       * @param {File} file
+       * @returns {Promise<string>}
+       */
       function toBase64(file) {
         return new Promise((resolve, reject) => {
           const reader = new FileReader();
@@ -74,39 +211,133 @@
         });
       }
 
-      document.getElementById("generateBtn").addEventListener("click", async () => {
-        const fileInput = document.getElementById("fileInput");
-        const resultEl = document.getElementById("result");
-        const files = fileInput.files;
-        if (!files || !files.length) {
-          alert("Please select an image first.");
+      // Restore persisted values on load
+      window.addEventListener("DOMContentLoaded", () => {
+        const savedSeller = localStorage.getItem("sellerCode");
+        const savedLot = localStorage.getItem("lotNumber");
+        if (savedSeller) document.getElementById("sellerCode").value = savedSeller;
+        if (savedLot) document.getElementById("lotNumber").value = savedLot;
+      });
+
+      // Persist seller code as it's typed
+      document.getElementById("sellerCode").addEventListener("input", (e) => {
+        localStorage.setItem("sellerCode", e.target.value);
+      });
+
+      // Generate lot title via AI by calling our Netlify serverless function.
+      document.getElementById("generateTitle").addEventListener("click", async () => {
+        const files = document.getElementById("fileInput").files;
+        const lotTitleInput = document.getElementById("lotTitle");
+        if (!files.length) {
+          alert("Please select at least one image before generating a title.");
           return;
         }
+        const firstFile = files[0];
         try {
-          const base64 = await toBase64(files[0]);
-          // POST to Netlify serverless function
-          const response = await fetch("/.netlify/functions/generate-title", {
+          // Convert the first image to a base64 Data URL
+          const base64 = await toBase64(firstFile);
+          // Call our deployed function. The function reads OPENAI_API_KEY from env
+          const resp = await fetch("/.netlify/functions/generate-title", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ image: base64 }),
           });
-          if (!response.ok) {
+          if (!resp.ok) {
             throw new Error("Failed to generate title");
           }
-          const data = await response.json();
-          const title = data?.title?.trim();
-          if (title) {
+          const data = await resp.json();
+          const aiTitle = data?.title?.trim();
+          if (aiTitle) {
             // Ensure 50 characters or less
-            resultEl.textContent = title.length > 50 ? title.slice(0, 50) : title;
+            lotTitleInput.value = aiTitle.length > 50 ? aiTitle.slice(0, 50) : aiTitle;
           } else {
-            resultEl.textContent = "No title was generated.";
+            alert("The AI did not return a title. Please try again.");
           }
         } catch (err) {
           console.error(err);
-          resultEl.textContent =
-            "Error generating title. Please ensure the function is deployed and your API key is set.";
+          alert(
+            "Error generating title. Please ensure the AI function is deployed and your API key is set."
+          );
         }
       });
+
+      // Handle folder selection using the File System Access API
+      document.getElementById("pickFolder").addEventListener("click", async () => {
+        try {
+          destDirHandle = await window.showDirectoryPicker();
+          document.getElementById("folderPath").textContent = "✅ Folder selected.";
+        } catch (err) {
+          console.error(err);
+          alert("Folder selection failed.");
+        }
+      });
+
+      // Renaming and saving images & CSV data
+      document.getElementById("submit").addEventListener("click", async () => {
+        const lotNumber = document.getElementById("lotNumber").value.trim();
+        const sellerCode = document.getElementById("sellerCode").value.trim();
+        const lotTitle = document.getElementById("lotTitle").value.trim();
+        const description = document.getElementById("description").value.trim();
+        const files = document.getElementById("fileInput").files;
+        const statusDiv = document.getElementById("status");
+        statusDiv.textContent = "";
+
+        if (!destDirHandle) {
+          alert("Please select a destination folder.");
+          return;
+        }
+        if (!lotNumber || files.length === 0) {
+          alert("Please enter a lot number and select images.");
+          return;
+        }
+        // Save each image with a new name (LotNumber-index)
+        for (let i = 0; i < files.length; i++) {
+          const newName = `${lotNumber}-${i + 1}${getFileExtension(files[i].name)}`;
+          const fileHandle = await destDirHandle.getFileHandle(newName, { create: true });
+          const writable = await fileHandle.createWritable();
+          await writable.write(await files[i].arrayBuffer());
+          await writable.close();
+        }
+        // Append lot data to a CSV file named lots.csv in the destination directory.
+        try {
+          const csvHandle = await destDirHandle.getFileHandle("lots.csv", { create: true });
+          // Read existing content if any
+          let csvContent = "";
+          try {
+            const csvFile = await csvHandle.getFile();
+            csvContent = await csvFile.text();
+          } catch (_) {
+            csvContent = "";
+          }
+          // If file has content and does not end with newline, add one
+          if (csvContent && !csvContent.endsWith("\n")) {
+            csvContent += "\n";
+          }
+          const newRow = `${lotNumber},${sellerCode},${lotTitle},${description}\n`;
+          const newContent = csvContent + newRow;
+          const csvWritable = await csvHandle.createWritable();
+          await csvWritable.write(newContent);
+          await csvWritable.close();
+        } catch (csvError) {
+          console.error("Error writing to CSV:", csvError);
+        }
+        statusDiv.textContent = `✅ Lot ${lotNumber} saved!`;
+        // Increment lot number and persist to localStorage
+        const nextLot = parseInt(lotNumber) + 1;
+        document.getElementById("lotNumber").value = nextLot;
+        localStorage.setItem("lotNumber", nextLot);
+        document.getElementById("fileInput").value = "";
+        // Clear lot title and description fields after saving, but keep seller code
+        document.getElementById("lotTitle").value = "";
+        document.getElementById("description").value = "";
+      });
+
+      // Helper to get file extension from a filename
+      function getFileExtension(filename) {
+        return filename.slice(((filename.lastIndexOf(".") - 1) >>> 0) + 2)
+          ? "." + filename.split(".").pop()
+          : "";
+      }
     </script>
   </body>
 </html>
