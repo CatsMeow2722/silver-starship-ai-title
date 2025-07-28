@@ -150,11 +150,16 @@
       </button>
       <div id="status"></div>
 
-      <!-- Paywall payment section: hidden by default. When the free quota is exceeded,
-           this section will display a PayPal subscription button. The actual client ID
-           and plan ID need to be provided by the site owner. -->
-      <div id="paymentSection" style="display:none; margin-top: 1rem;">
-        <p>You have reached the free lot limit. Please subscribe to continue using this tool.</p>
+      <!-- Paywall payment and password entry section: hidden by default -->
+      <div id="paymentSection" style="display: none; margin-top: 1rem;">
+        <p>You have reached the free lot limit of 20 free lots. Please subscribe or enter the monthly password to continue using this tool.</p>
+        <div id="passwordEntry" style="margin-top: 1rem;">
+          <label for="passwordInput">Have a monthly password? Enter it here:</label>
+          <input type="password" id="passwordInput" />
+          <button id="validatePassword" type="button">Validate Password</button>
+          <div id="passwordStatus"></div>
+        </div>
+        <!-- PayPal button container: the actual client ID and plan ID must be provided in the script below -->
         <div id="paypal-button-container"></div>
       </div>
 
@@ -167,6 +172,10 @@
     <script>
       // Keep track of the destination directory handle
       let destDirHandle = null;
+      // Track whether the monthly password has been verified. This value is stored
+      // in localStorage so it persists across sessions. When true, the paywall
+      // limit is bypassed and users can continue saving lots beyond the free quota.
+      let passwordVerified = localStorage.getItem("passwordVerified") === "true";
 
       /**
        * Convert a File object to a Base64 data URL. This helper allows us to
@@ -194,6 +203,38 @@
       // Persist seller code as it's typed
       document.getElementById("sellerCode").addEventListener("input", (e) => {
         localStorage.setItem("sellerCode", e.target.value);
+      });
+
+      // Validate the monthly password when the user clicks the validate button.
+      document.getElementById("validatePassword").addEventListener("click", async () => {
+        const pwdInput = document.getElementById("passwordInput");
+        const statusDiv = document.getElementById("passwordStatus");
+        const entered = pwdInput.value.trim();
+        if (!entered) {
+          statusDiv.textContent = "Please enter a password.";
+          return;
+        }
+        try {
+          const resp = await fetch("/.netlify/functions/check-password", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ password: entered }),
+          });
+          const data = await resp.json();
+          if (resp.ok && data.success) {
+            passwordVerified = true;
+            localStorage.setItem("passwordVerified", "true");
+            statusDiv.textContent =
+              "Password accepted. You can continue using the tool.";
+            // Hide the payment section after successful validation
+            document.getElementById("paymentSection").style.display = "none";
+          } else {
+            statusDiv.textContent = "Invalid password. Please try again.";
+          }
+        } catch (err) {
+          console.error(err);
+          statusDiv.textContent = "Error validating password.";
+        }
       });
 
       // Generate lot title via AI by calling our Netlify serverless function.
@@ -246,15 +287,15 @@
 
       // Renaming and saving images & CSV data
       document.getElementById("submit").addEventListener("click", async () => {
-        // Paywall: allow only a limited number of free saves
+        // Paywall: allow only a limited number of free saves unless the user has
+        // successfully validated the monthly password. The free quota is defined
+        // by maxFreeUses. Usage counts are persisted in localStorage.
         const maxFreeUses = 20;
         let usageCount = parseInt(localStorage.getItem("usageCount") || "0", 10);
-        if (usageCount >= maxFreeUses) {
-          // Show the payment section with the PayPal button and prevent saving.
+        if (usageCount >= maxFreeUses && !passwordVerified) {
+          // Show the payment/password section and prevent saving until the user
+          // either subscribes via PayPal or enters the correct password.
           document.getElementById("paymentSection").style.display = "block";
-          alert(
-            `You have reached the limit of ${maxFreeUses} free lots. Please subscribe to continue.`
-          );
           return;
         }
 
@@ -327,13 +368,11 @@
           : "";
       }
     </script>
-
-    <!-- PayPal SDK and subscription button setup. Replace YOUR_CLIENT_ID with your PayPal client ID
-         and YOUR_PLAN_ID with the ID of your subscription plan. The PayPal button will render
-         inside the element with id="paypal-button-container" when a user exceeds their free quota. -->
+    <!-- PayPal SDK and subscription button setup. Replace YOUR_CLIENT_ID and YOUR_PLAN_ID
+         with actual PayPal client ID and subscription plan ID. -->
     <script src="https://www.paypal.com/sdk/js?client-id=YOUR_CLIENT_ID&vault=true&intent=subscription"></script>
     <script>
-      // Initialize PayPal buttons for subscription payments. This uses the subscription API with
+      // Initialize Paypal Buttons for subscription payments. This uses the subscription API with
       // a preconfigured plan ID. When the user approves the subscription, display a thank-you
       // message and hide the payment section.
       paypal.Buttons({
