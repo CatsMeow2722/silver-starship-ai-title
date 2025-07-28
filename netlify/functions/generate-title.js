@@ -1,7 +1,7 @@
 /*
  * Netlify Function to generate a short title for an uploaded image.
  *
- * This function is invoked via an HTTP POST from the front‑end. The
+ * This function is invoked via an HTTP POST from the front-end. The
  * request body should be JSON containing an `image` property, which
  * is a data URL (e.g. `data:image/png;base64,...`) representing the
  * uploaded photo. The function uses OpenAI’s Chat Completion API
@@ -11,7 +11,7 @@
  *
  * An OpenAI API key must be set in the site’s environment variables
  * (OPENAI_API_KEY). If the key isn’t available or the API call
- * fails, the function returns a simple timestamp‑based placeholder.
+ * fails, the function returns a simple timestamp-based placeholder.
  */
 
 exports.handler = async function (event) {
@@ -47,7 +47,7 @@ exports.handler = async function (event) {
             role: 'user',
             content: [
               { type: 'text', text: 'Describe this item with a short auction lot title:' },
-              { type: 'image_url', image_url: image },
+              { type: 'image_url', image_url: { url: image } },
             ],
           },
         ];
@@ -78,10 +78,16 @@ exports.handler = async function (event) {
               },
               body: JSON.stringify({ title: assistantMessage }),
             };
+          } else {
+            console.error('No assistantMessage in response', data);
           }
+        } else {
+          const errorData = await resp.text();
+          console.error('OpenAI API error status', resp.status, errorData);
         }
-      } catch (_) {
-        // Fall back to placeholder below on any error
+      } catch (err) {
+        console.error('Error calling OpenAI API:', err);
+        // Fall through to fallback
       }
     }
 
@@ -97,6 +103,7 @@ exports.handler = async function (event) {
       body: JSON.stringify({ title: fallbackTitle }),
     };
   } catch (err) {
+    console.error('Unexpected error:', err);
     return {
       statusCode: 500,
       headers: { 'Content-Type': 'application/json' },
