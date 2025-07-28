@@ -98,33 +98,6 @@
         font-size: 0.85rem;
         line-height: 1.4;
       }
-      /* Call to action box styling */
-      .cta {
-        margin-top: 2rem;
-        padding: 1rem;
-        background-color: #edf7ed; /* light green tint */
-        border: 1px solid #c3e6cb;
-        border-radius: 6px;
-        text-align: center;
-        color: #155724; /* dark green text */
-        font-size: 0.95rem;
-        line-height: 1.5;
-      }
-      .cta strong {
-        display: block;
-        font-weight: 700;
-        margin-bottom: 0.5rem;
-      }
-      .cta .cta-button {
-        display: inline-block;
-        margin-top: 0.5rem;
-        background-color: #2a8f36;
-        color: #ffffff;
-        padding: 8px 16px;
-        border-radius: 4px;
-        text-decoration: none;
-        font-weight: 600;
-      }
       /* Responsive adjustments for smaller screens */
       @media (max-width: 600px) {
         body {
@@ -163,34 +136,25 @@
       <input type="number" id="lotNumber" value="1" />
       <label for="sellerCode">Seller Code:</label>
       <input type="text" id="sellerCode" />
+      <label for="fileInput">Select Images for Lot:</label>
+      <input type="file" id="fileInput" multiple accept="image/*" />
+
       <label for="lotTitle">Lot Title:</label>
       <input type="text" id="lotTitle" maxlength="50" />
       <button id="generateTitle" type="button" style="margin-top: 0">
         Generate Lot Title
       </button>
+      <!-- Moved and renamed save button: appears right after title generation -->
+      <button id="submit" type="button" style="background-color: #dc3545; margin-top: 0; color: #ffffff">
+        Save Lot
+      </button>
+      <div id="status"></div>
+
       <label for="description">Description:</label>
       <textarea id="description" rows="3" placeholder="Enter description"></textarea>
       <label for="pickFolder">Destination Folder:</label>
       <button id="pickFolder" type="button">Pick Folder</button>
       <div id="folderPath"></div>
-      <label for="fileInput">Select Images for Lot:</label>
-      <input type="file" id="fileInput" multiple accept="image/*" />
-      <button id="submit" type="button">Rename &amp; Save</button>
-      <div id="status"></div>
-      <!-- Call to action section for upselling the data entry service -->
-      <div class="cta">
-        <strong
-          >Let us handle your lot titles and data entry for just 5¢ per
-          listing!</strong
-        >
-        <a
-          href="https://tally.so/r/3x5ZDG"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="cta-button"
-          >Get started</a
-        >
-      </div>
     </div>
     <script>
       // Keep track of the destination directory handle
