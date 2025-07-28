@@ -150,6 +150,14 @@
       </button>
       <div id="status"></div>
 
+      <!-- Paywall payment section: hidden by default. When the free quota is exceeded,
+           this section will display a PayPal subscription button. The actual client ID
+           and plan ID need to be provided by the site owner. -->
+      <div id="paymentSection" style="display:none; margin-top: 1rem;">
+        <p>You have reached the free lot limit. Please subscribe to continue using this tool.</p>
+        <div id="paypal-button-container"></div>
+      </div>
+
       <label for="description">Description:</label>
       <textarea id="description" rows="3" placeholder="Enter description"></textarea>
       <label for="pickFolder">Destination Folder:</label>
@@ -238,6 +246,18 @@
 
       // Renaming and saving images & CSV data
       document.getElementById("submit").addEventListener("click", async () => {
+        // Paywall: allow only a limited number of free saves
+        const maxFreeUses = 20;
+        let usageCount = parseInt(localStorage.getItem("usageCount") || "0", 10);
+        if (usageCount >= maxFreeUses) {
+          // Show the payment section with the PayPal button and prevent saving.
+          document.getElementById("paymentSection").style.display = "block";
+          alert(
+            `You have reached the limit of ${maxFreeUses} free lots. Please subscribe to continue.`
+          );
+          return;
+        }
+
         const lotNumber = document.getElementById("lotNumber").value.trim();
         const sellerCode = document.getElementById("sellerCode").value.trim();
         const lotTitle = document.getElementById("lotTitle").value.trim();
@@ -294,6 +314,10 @@
         // Clear lot title and description fields after saving, but keep seller code
         document.getElementById("lotTitle").value = "";
         document.getElementById("description").value = "";
+
+        // Increment and persist usage count for paywall tracking
+        usageCount += 1;
+        localStorage.setItem("usageCount", usageCount);
       });
 
       // Helper to get file extension from a filename
@@ -302,6 +326,28 @@
           ? "." + filename.split(".").pop()
           : "";
       }
+    </script>
+
+    <!-- PayPal SDK and subscription button setup. Replace YOUR_CLIENT_ID with your PayPal client ID
+         and YOUR_PLAN_ID with the ID of your subscription plan. The PayPal button will render
+         inside the element with id="paypal-button-container" when a user exceeds their free quota. -->
+    <script src="https://www.paypal.com/sdk/js?client-id=YOUR_CLIENT_ID&vault=true&intent=subscription"></script>
+    <script>
+      // Initialize PayPal buttons for subscription payments. This uses the subscription API with
+      // a preconfigured plan ID. When the user approves the subscription, display a thank-you
+      // message and hide the payment section.
+      paypal.Buttons({
+        createSubscription: function (data, actions) {
+          return actions.subscription.create({
+            plan_id: 'YOUR_PLAN_ID'
+          });
+        },
+        onApprove: function (data, actions) {
+          alert('Subscription completed! Thank you for your support.');
+          // hide payment section after successful subscription
+          document.getElementById('paymentSection').style.display = 'none';
+        }
+      }).render('#paypal-button-container');
     </script>
   </body>
 </html>
