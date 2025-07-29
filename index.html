@@ -32,6 +32,7 @@
       }
       /* Subtitle styling below the main heading */
       .subtitle {
+ 
         text-align: center;
         color: #6c757d;
         margin-top: -0.5rem;
@@ -200,6 +201,7 @@
         if (savedLot) document.getElementById("lotNumber").value = savedLot;
       });
 
+     
       // Persist seller code as it's typed
       document.getElementById("sellerCode").addEventListener("input", (e) => {
         localStorage.setItem("sellerCode", e.target.value);
@@ -234,6 +236,7 @@
         } catch (err) {
           console.error(err);
           statusDiv.textContent = "Error validating password.";
+      
         }
       });
 
