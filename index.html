@@ -151,6 +151,13 @@
       </button>
       <div id="status"></div>
 
+      <!-- Paywall payment and password entry section moved to bottom -->
+
+      <label for="description">Description:</label>
+      <textarea id="description" rows="3" placeholder="Enter description"></textarea>
+      <label for="pickFolder">Destination Folder:</label>
+      <button id="pickFolder" type="button">Pick Folder</button>
+      <div id="folderPath"></div>
       <!-- Paywall payment and password entry section: hidden by default -->
       <div id="paymentSection" style="display: none; margin-top: 1rem;">
         <p>You have reached the free lot limit of 20 free lots. Please subscribe or enter the monthly password to continue using this tool.</p>
@@ -163,12 +170,6 @@
         <!-- PayPal button container: the actual client ID and plan ID must be provided in the script below -->
         <div id="paypal-button-container"></div>
       </div>
-
-      <label for="description">Description:</label>
-      <textarea id="description" rows="3" placeholder="Enter description"></textarea>
-      <label for="pickFolder">Destination Folder:</label>
-      <button id="pickFolder" type="button">Pick Folder</button>
-      <div id="folderPath"></div>
     </div>
     <script>
       // Keep track of the destination directory handle
